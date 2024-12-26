@@ -29,6 +29,77 @@ sudo apt-get install iptables-persistent
 sudo iptables-save > /etc/iptables/rules.v4
 sudo ip6tables-save > /etc/iptables/rules.v6
 ```
+### Configuring Apt Sources
+By default, the unitree comes with jetpack revision `r35.1` and Ubuntu 20.04. If you're outside China, you can change the apt source lists to the default values for faster software download. First create a backup of the old apt sources:
+
+```bash
+sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
+```
+
+Then copy the following into the `/etc/apt/sources.list`:
+
+``` bash
+# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
+# newer versions of the distribution.
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic main restricted
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic main restricted
+
+## Major bug fix updates produced after the final release of the
+## distribution.
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main restricted
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main restricted
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team. Also, please note that software in universe WILL NOT receive any
+## review or updates from the Ubuntu security team.
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic universe
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic universe
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-updates universe
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-updates universe
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team, and may not be under a free licence. Please satisfy yourself as to
+## your rights to use the software. Also, please note that software in
+## multiverse WILL NOT receive any review or updates from the Ubuntu
+## security team.
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic multiverse
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-updates multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-updates multiverse
+
+## N.B. software from this repository may not have been tested as
+## extensively as that contained in the main release, although it includes
+## newer versions of some applications which may provide useful features.
+## Also, please note that software in backports WILL NOT receive any review
+## or updates from the Ubuntu security team.
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-backports main restricted universe multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-backports main restricted universe multiverse
+
+## Uncomment the following two lines to add software from Canonical's
+## 'partner' repository.
+## This software is not part of Ubuntu, but is offered by Canonical and the
+## respective vendors as a service to Ubuntu users.
+# deb http://archive.canonical.com/ubuntu bionic partner
+# deb-src http://archive.canonical.com/ubuntu bionic partner
+
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-security main restricted
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-security main restricted
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-security universe
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-security universe
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-security multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-security multiverse
+```
+We can also enable the Nvidia mirrors as explained [here](https://docs.nvidia.com/jetson/archives/r35.1/DeveloperGuide/text/SD/SoftwarePackagesAndTheUpdateMechanism.html). Specifically, do `sudo vi /etc/apt/sources.list.d/nvidia-l4t-apt-source.list` and copy the following inside:
+```bash
+deb https://repo.download.nvidia.com/jetson/common r35.1 main
+deb https://repo.download.nvidia.com/jetson/t234 r35.1 main
+```
+Finally, update the and upgrade:
+```bash
+sudo apt update
+sudo apt upgrade
+```
+
 ### Robot
 Now tell the computer on the robot to use the internet shared by the host computer. SSH into the robot's computer with IP address `192.168.123.18`, username `unitree`, and password `123`. Note that the host computer's IP range should have already been set to static mode with an IP in the `192.168.123.x` range where x is anything except IPs already used by the others (e.g. `.18`).
 
