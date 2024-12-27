@@ -37,6 +37,9 @@ realsense:
 hesai:
 	@cd deploy && docker build --no-cache --tag go2py_hesai:latest -f docker/Dockerfile.hesai .
 
+mid360:
+	@cd deploy && docker build --no-cache --tag go2py_mid360:latest -f docker/Dockerfile.mid360 .
+
 bridge:
 	@cd deploy && docker build --no-cache --tag go2py_bridge:latest -f docker/Dockerfile.bridge .
 
@@ -53,6 +56,11 @@ hesai_install:
 	@cp deploy/services/go2py-hesai.service /etc/systemd/system/
 	@systemctl enable go2py-hesai.service
 	@systemctl start go2py-hesai.service
+
+mid360_install:
+	@cp deploy/services/go2py-mid360.service /etc/systemd/system/
+	@systemctl enable go2py-mid360.service
+	@systemctl start go2py-mid360.service
 
 bridge_install:
 	@cp deploy/services/go2py-bridge.service /etc/systemd/system/
@@ -73,6 +81,11 @@ hesai_uninstall:
 	@systemctl disable go2py-hesai.service
 	@systemctl stop go2py-hesai.service
 	@rm /etc/systemd/system/go2py-hesai.service
+
+mid360_uninstall:
+	@systemctl disable go2py-mid360.service
+	@systemctl stop go2py-mid360.service
+	@rm /etc/systemd/system/go2py-mid360.service
 
 bridge_uninstall:
 	@systemctl disable go2py-bridge.service
