@@ -6,7 +6,7 @@ After=multi-user.target
 [Service]
 Restart=always
 ExecStartPre=/usr/bin/docker rm -f go2py_bridge || true
-ExecStart=/bin/bash -c '/usr/bin/docker run --rm --name go2py_bridge --privileged --network host -v /dev/*:/dev/* -v /etc/localtime:/etc/localtime:ro --runtime nvidia go2py_bridge:latest' 
+ExecStart=/bin/bash -c '/usr/bin/docker run --rm --name go2py_bridge --privileged --network host -v /dev/*:/dev/* -v /etc/localtime:/etc/localtime:ro go2py_bridge:latest' 
 ExecStop=/usr/bin/docker stop -t 2 go2py_bridge
 
 [Install]
