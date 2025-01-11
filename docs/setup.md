@@ -100,6 +100,7 @@ sudo apt update
 sudo apt upgrade
 ```
 ### Installing CUDA
+
 To use the onboard GPU we need to install the CUDA toolkit for Jetson [here](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=aarch64-jetson&Compilation=Native&Distribution=Ubuntu&target_version=20.04&target_type=deb_local). Specifically:
 
 ```
@@ -120,6 +121,7 @@ In order to install Torch, we need to know what Jetpack revision we have. You ca
 dpkg-query --show nvidia-l4t-core
 ```
 ### Installing Conda
+
 Simply run the following commands to install Conda:
 
 ```bash
@@ -141,7 +143,7 @@ conda activate rl-deploy
 
 Finally, install the deep learning libraries needed for the deployments:
 
-####Pytorch
+#### DL Frameworks
 Download and install appropriate version as described [here](https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048):
 
 ```bash
