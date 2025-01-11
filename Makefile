@@ -38,7 +38,8 @@ hesai:
 	@cd deploy && docker build --no-cache --tag go2py_hesai:latest -f docker/Dockerfile.hesai .
 
 mid360:
-	@cd deploy && docker build --no-cache --tag go2py_mid360:latest -f docker/Dockerfile.mid360 .
+	@cd deploy && docker build --tag go2py_mid360:latest -f docker/Dockerfile.mid360 .
+	# @cd deploy && docker build --no-cache --tag go2py_mid360:latest -f docker/Dockerfile.mid360 .
 
 bridge:
 	@cd deploy && docker build --no-cache --tag go2py_bridge:latest -f docker/Dockerfile.bridge .

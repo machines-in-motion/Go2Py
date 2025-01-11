@@ -1,0 +1,37 @@
+FROM nvcr.io/nvidia/isaac/ros:aarch64-ros2_humble_42f50fd45227c63eb74af1d69ddc2970
+ENV DEBIAN_FRONTEND noninteractive
+ARG CONDA_VER=latest
+ARG OS_TYPE=aarch64
+
+RUN apt-get update && apt-get install -y -qq --no-install-recommends \ cuda \
+                                                                        wget \
+                                                                        ros-humble-rmw-cyclonedds-cpp ros-humble-rosidl-generator-dds-idl \
+                                                                        && rm -rf /var/lib/apt/lists/*
+
+# MID360 Lidar Drivers
+RUN cd /root && git clone https://github.com/Livox-SDK/Livox-SDK2.git && cd ./Livox-SDK2/ && mkdir build && cd build && cmake .. && make -j4 && make install
+RUN cd /root && git clone https://github.com/Livox-SDK/livox_ros_driver2.git ws_livox/src/livox_ros_driver2 && cd ws_livox/src/livox_ros_driver2 && source /opt/ros/humble/setup.bash && cd /root/ws_livox/src/livox_ros_driver2 && /bin/bash build.sh humble
+# FAST-LIO Install
+RUN cd /root && mkdir -p fastlio-ws/src && cd fastlio-ws/src && git clone https://github.com/Ericsii/FAST_LIO.git --recursive && cd FAST_LIO && git checkout ros2 && cd /root/fastlio-ws && source /root/ws_livox/install/setup.bash && colcon build --symlink-install  
+
+RUN cd / && git clone https://github.com/unitreerobotics/unitree_ros2 && cd /unitree_ros2/cyclonedds_ws/src && \
+git clone https://github.com/ros2/rmw_cyclonedds -b humble && git clone https://github.com/eclipse-cyclonedds/cyclonedds -b releases/0.10.x &&\
+cd .. && colcon build --packages-select cyclonedds && source /opt/ros/humble/setup.bash && colcon build
+
+
+RUN echo "export CYCLONEDDS_HOME=/unitree_ros2/cyclonedds_ws/install/cyclonedds/" >> ~/.bashrc
+RUN cd /root && git clone https://github.com/eclipse-cyclonedds/cyclonedds-python -b releases/0.10.x && cd cyclonedds-python && pip install .
+
+# CycloneDDS-cxx
+RUN cd /root && git clone https://github.com/eclipse-cyclonedds/cyclonedds-cxx -b releases/0.10.x &&\
+    cd cyclonedds-cxx && mkdir build install && cd build && cmake .. && \
+    cmake --build . --target install
+
+# Install Python dependencies
+RUN pip install matplotlib opencv-python scipy isort black onnx onnxruntime
+RUN pip install https://github.com/NVIDIA/warp/releases/download/v1.5.1/warp_lang-1.5.1+cu11-py3-none-manylinux2014_aarch64.whl
+RUN pip install cyclonedds pygame pynput jupyter ipykernel meshcat
+
+# RUN echo 'source /unitree_ros2/cyclonedds_ws/install/setup.bash' >> ~/.bashrc
+# RUN echo 'export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp' >> ~/.bashrc
+# RUN echo 'export CYCLONEDDS_URI=file:///home/Go2py/Go2Py/assets/cyclonedds.xml' >> ~/.bashrc
