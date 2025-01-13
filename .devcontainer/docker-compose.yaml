@@ -10,9 +10,12 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ../:/home/Go2py
       - /dev/input:/dev/input
+      - /dev/shm:/dev/shm
+      - /dev:/dev
     environment:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
     runtime: nvidia
     stdin_open: true
     tty: true
+    ipc: host

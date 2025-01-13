@@ -27,7 +27,8 @@ SHELL ["/bin/bash", "-c"]
 COPY docker/scripts/MID360_config.json /root/ws_livox/src/livox_ros_driver2/config/MID360_config.json
 COPY launch_files/msg_MID360_launch.py /root/ws_livox/src/livox_ros_driver2/launch_ROS2/msg_MID360_launch.py
 RUN cd /root/ws_livox/src/livox_ros_driver2 && source /opt/ros/humble/setup.sh && /bin/bash build.sh humble
-
+# Clone and compile FAST-LIO
+RUN cd /root && mkdir -p fastlio-ws/src && cd fastlio-ws/src && git clone https://github.com/Ericsii/FAST_LIO.git --recursive && cd FAST_LIO && git checkout ros2 && cd /root/fastlio-ws && source /root/ws_livox/install/setup.bash && colcon build --symlink-install  
 # Copy the script to start the nodes
 COPY docker/scripts/mid360_start.sh /root/mid360_start.sh
 # set the entrypoint to bash

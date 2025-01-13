@@ -1,7 +1,7 @@
 [Unit]
 Description=ROS2 device driver container
-Requires=multi-user.target
-After=multi-user.target
+Requires=go2py-robot-description.service
+After=go2py-robot-description.service
 
 [Service]
 Restart=always
