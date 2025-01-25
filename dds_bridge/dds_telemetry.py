@@ -41,16 +41,19 @@ class Go2DDSServer:
         self.depth_topic = Topic(self.domain, f'{self.robot_name}_depth', DepthImage)  
         self.map_topic = Topic(self.domain, f'{self.robot_name}_lio_map', PointCloud)
         self.lidar_odom_topic = Topic(self.domain, f'{self.robot_name}_lio_odom', Pose)
+        self.leg_odom_topic = Topic(self.domain, f'{self.robot_name}_leg_odom', Pose)
         self.high_cmd_topic = Topic(self.domain, f'{self.robot_name}_high_cmd', HighCommand)
         self.rgb_publisher = Publisher(self.domain)
         self.depth_publisher = Publisher(self.domain)
         self.map_publisher = Publisher(self.domain)
         self.lidar_odom_publisher = Publisher(self.domain)
+        self.leg_odom_publisher = Publisher(self.domain)
         self.high_cmd_reader = DataReader(self.domain, self.high_cmd_topic)
         self.rgb_writer = DataWriter(self.rgb_publisher, self.rgb_topic)
         self.depth_writer = DataWriter(self.depth_publisher, self.depth_topic)
         self.map_writer = DataWriter(self.map_publisher, self.map_topic)
         self.lidar_odom_writer = DataWriter(self.lidar_odom_publisher, self.lidar_odom_topic)
+        self.leg_odom_writer = DataWriter(self.leg_odom_publisher, self.leg_odom_topic)
         
         
         
@@ -75,6 +78,12 @@ class Go2DDSServer:
         pose_msg = Pose(quat=q.tolist(), trans=t.tolist(), timestamp='')
         self.lidar_odom_writer.write(pose_msg)
 
+    def sendLegOdom(self, odom_T_body):
+        q = R.from_matrix(odom_T_body[:3,:3]).as_quat()
+        t = odom_T_body[:3,3]
+        pose_msg = Pose(quat=q.tolist(), trans=t.tolist(), timestamp='')
+        self.lidar_odom_writer.write(pose_msg) 
+
     def getHighCmd(self):
         return get_last_msg(self.high_cmd_reader, HighCommand)    
     
@@ -87,12 +96,15 @@ class Go2DDSClient:
         self.depth_topic = Topic(self.domain, f'{self.robot_name}_depth', DepthImage)  
         self.map_topic = Topic(self.domain, f'{self.robot_name}_lio_map', PointCloud)
         self.lidar_odom_topic = Topic(self.domain, f'{self.robot_name}_lio_odom', Pose)
+        self.leg_odom_topic = Topic(self.domain, f'{self.robot_name}_leg_odom   ', Pose)
         self.high_cmd_topic = Topic(self.domain, f'{self.robot_name}_high_cmd', HighCommand)
         self.rgb_reader = DataReader(self.domain, self.rgb_topic)
         self.depth_reader = DataReader(self.domain, self.depth_topic)
         self.map_reader = DataReader(self.domain, self.map_topic)
         self.lidar_odom_reader = DataReader(self.domain, self.lidar_odom_topic)
+        self.leg_odom_reader = DataReader(self.domain, self.leg_odom_topic)
         self.high_cmd_writer = DataWriter(self.domain, self.high_cmd_topic)
+
 
     def getRGB(self):
         return get_last_msg(self.rgb_reader, RGBImage)
@@ -105,6 +117,9 @@ class Go2DDSClient:
     
     def getLidarOdom(self):
         return get_last_msg(self.lidar_odom_reader, Pose)
+    
+    def getLegOdom(self):
+        return get_last_msg(self.leg_odom_reader, Pose)
     
     def sendHighCmd(self, vx, vy, omega):
         self.high_cmd_writer.write(HighCommand(vx=vx, vy=vy, omega=omega, timestamp=''))

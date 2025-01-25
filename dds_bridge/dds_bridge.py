@@ -15,7 +15,8 @@ RECORD_DATASET = False
 DATASET_LENGTH = 120
 ros2_init()
 map_bridge = PoindCloud2Bridge('/Laser_map')
-fast_lio_odom = ROS2OdometryReader('/Odometry', 'odometry_subscriber')
+fast_lio_odom = ROS2OdometryReader('/Odometry', 'lidar_odometry_subscriber')
+go2_odom = ROS2OdometryReader('/go2/odom', 'leg_odometry_subscriber')
 rgb_camera_bridge = ROS2CameraReader('/camera/color/image_raw', 'rgb_reader')
 depth_camera_bridge = ROS2CameraReader('/camera/depth/image_rect_raw', 'depth_reader')
 
@@ -24,6 +25,7 @@ ros2_exec_manager.add_node(map_bridge)
 ros2_exec_manager.add_node(fast_lio_odom)
 ros2_exec_manager.add_node(rgb_camera_bridge)
 ros2_exec_manager.add_node(depth_camera_bridge)
+ros2_exec_manager.add_node(go2_odom)
 ros2_exec_manager.start()
 
 # The extrinsics of the MID360 LiDAR with respect to the robot body
@@ -44,6 +46,13 @@ def GetLidarPose():
         return lio_T_body
     else:
         return None
+    
+def GetLegOdom():
+    odom = go2_odom.get_pose()
+    if odom is not None:
+        return odom
+    else:
+        return None
 
 def GetLidarMap():
     pcd = map_bridge._points
@@ -61,6 +70,7 @@ map_update_counter = 0
 rgb_imgs = []
 depth_imgs = []
 lio_Ts_robot = []
+odom_Ts_robot = []
 pcd_maps = []
 
 
@@ -70,11 +80,15 @@ start_time = time.time()
 while True:
     tic = time.time()
     lio_T_robot = GetLidarPose()
+    odom_T_robot = GetLegOdom()
     if lio_T_robot is not None:
         dds_server.sendLidarOdom(lio_T_robot)
         if RECORD_DATASET:
             lio_Ts_robot.append(lio_T_robot)
-
+    if odom_T_robot is not None:
+        dds_server.sendLegOdom(odom_T_robot)
+        if RECORD_DATASET:
+            odom_Ts_robot.append(odom_T_robot)
 
     if map_update_counter%10==0:
         lio_pcd = GetLidarMap()
