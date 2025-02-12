@@ -994,6 +994,7 @@ Stephen Brawner (brawner@gmail.com)
       </material>
     </visual>
   </link>
+
   <joint
     name="Joint6"
     type="revolute">
@@ -1127,6 +1128,21 @@ Stephen Brawner (brawner@gmail.com)
       upper="0"
       effort="0"
       velocity="0" />
+  </joint>
+
+  <link
+    name="Link6_tip">
+  </link>
+  <joint
+    name="tip_joint"
+    type="fixed">
+    <origin
+      xyz="0.0 0.0 0.0"
+      rpy="0.0 0.0 0.0" />
+    <parent
+      link="Link6" />
+    <child
+      link="Link6_tip" />
   </joint>
 </robot>
 

@@ -249,7 +249,7 @@ class Go2Sim:
         self.with_arm = with_arm
         
         if xml_path is None:
-            xml = 'mujoco/go2.xml' if not with_arm else 'mujoco/go2_with_arm.xml'
+            xml = 'mujoco/go2.xml' if not with_arm else 'mujoco/go2_with_arm_no_ef.xml'
             self.model = mujoco.MjModel.from_xml_path(
                 os.path.join(ASSETS_PATH, xml)
             )
@@ -301,9 +301,9 @@ class Go2Sim:
                                     0.0, 0.75422204, -1.53229916]
         
         if self.with_arm:
-            self.prestanding_q = np.array(self.prestanding_q+8*[0])
-            self.sitting_q = np.array(self.sitting_q+8*[0])
-            self.standing_q = np.array(self.standing_q+8*[0])
+            self.prestanding_q = np.array(self.prestanding_q+6*[0])
+            self.sitting_q = np.array(self.sitting_q+6*[0])
+            self.standing_q = np.array(self.standing_q+6*[0])
         else:
             self.prestanding_q = np.array(self.prestanding_q)
             self.sitting_q = np.array(self.sitting_q)
