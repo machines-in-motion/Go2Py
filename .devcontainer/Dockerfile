@@ -1,1 +1,1 @@
-Dockerfile.go2
+Dockerfile.x86
