@@ -120,6 +120,12 @@
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black"/>
             <geom name="FR" class="foot"/>
             <site name="FR_foot" pos="0 0 -0.213" size="0.02"/>
+              <body name="FR_dummy" pos="-0.002 0 -0.213">
+                <!-- <inertial pos="0 0 0" mass="0.0001" diaginertia="0.0 0.0 0.0"/> -->
+                <inertial pos="0 0 0" mass="0.04" diaginertia="9.6e-06 9.6e-06 9.6e-06"/>
+                <geom size="0.022" rgba="0 1 0 1"/>
+                <site name="FR_force_site" size="0.022" pos="0 0 0" rgba="0 1 0 1"/>
+             </body>
           </body>
         </body>
       </body>
@@ -149,7 +155,12 @@
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black"/>
             <geom name="FL" class="foot"/>
             <site name="FL_foot" pos="0 0 -0.213" size="0.02"/>
-
+            <body name="FL_dummy" pos="-0.002 0 -0.213">
+                <!-- <inertial pos="0 0 0" mass="0.0001" diaginertia="0.0 0.0 0.0"/> -->
+                <inertial pos="0 0 0" mass="0.04" diaginertia="9.6e-06 9.6e-06 9.6e-06"/>
+                <geom size="0.022" rgba="0 1 0 1"/>
+                <site name="FL_force_site" size="0.022" pos="0 0 0" rgba="0 1 0 1"/>
+            </body>
           </body>
         </body>
       </body>
@@ -179,6 +190,12 @@
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black"/>
             <geom name="RR" class="foot"/>
             <site name="RR_foot" pos="0 0 -0.213" size="0.02"/>
+            <body name="RR_dummy" pos="-0.002 0 -0.213">
+                <!-- <inertial pos="0 0 0" mass="0.0001" diaginertia="0.0 0.0 0.0"/> -->
+                <inertial pos="0 0 0" mass="0.04" diaginertia="9.6e-06 9.6e-06 9.6e-06"/>
+                <geom size="0.022" rgba="0 1 0 1"/>
+                <site name="RR_force_site" size="0.022" pos="0 0 0" rgba="0 1 0 1"/>
+            </body>
           </body>
         </body>
       </body>
@@ -208,7 +225,12 @@
             <geom pos="0 0 -0.213" mesh="foot" class="visual" material="black"/>
             <geom name="RL" class="foot"/>
             <site name="RL_foot" pos="0 0 -0.213" size="0.02"/>
-
+              <body name="RL_dummy" pos="-0.002 0 -0.213">
+                  <!-- <inertial pos="0 0 0" mass="0.0001" diaginertia="0.0 0.0 0.0"/> -->
+                  <inertial pos="0 0 0" mass="0.04" diaginertia="9.6e-06 9.6e-06 9.6e-06"/>
+                  <geom size="0.022" rgba="0 1 0 1"/>
+                  <site name="RL_force_site" size="0.022" pos="0 0 0" rgba="0 1 0 1"/>
+              </body>
           </body>
         </body>
       </body>
@@ -239,6 +261,12 @@
                     <inertial pos="-0.0068528 -3.9973e-06 0.039705" quat="0.494949 0.495288 -0.504676 0.504992" mass="0.077892" diaginertia="4.8843e-05 3.8232e-05 1.7707e-05"/>
                     <joint name="Joint6" pos="0 0 0" axis="0 0 -1" range="-2.35 2.35"/>
                     <geom type="mesh" rgba="1 1 1 1" mesh="Link6"/>
+                      <body name="EF_dummy" pos="0.0 0 0.0405">
+                        <!-- <inertial pos="0 0 0" mass="0.0001" diaginertia="0.0 0.0 0.0"/> -->
+                        <inertial pos="0 0 0" mass="0.04" diaginertia="9.6e-06 9.6e-06 9.6e-06"/>
+                        <geom size="0.015" rgba="0 1 0 1"/>
+                        <site name="EF_force_site" size="0.025" pos="0 0 0" rgba="0 1 0 1"/>
+                     </body>
                   </body>
                 </body>
               </body>
@@ -283,7 +311,17 @@
     <touch name="FL_foot_contact" site="RL_foot"/>
     <touch name="RR_foot_contact" site="RR_foot"/>
     <touch name="RL_foot_contact" site="RL_foot"/>
+    <force name="FL_force" site="FL_force_site"/>
+    <force name="FR_force" site="FR_force_site"/>
+    <force name="RL_force" site="RL_force_site"/>
+    <force name="RR_force" site="RR_force_site"/>
+    <force name="EF_force" site="EF_force_site"/>
   </sensor>
+
+
+
+
+
 
   <keyframe>
     <key name="home" qpos="0 0 0.27 1 0 0 0 0 0.9 -1.8 0 0.9 -1.8 0 0.9 -1.8 0 0.9 -1.8 0 0 0 0 0 0"

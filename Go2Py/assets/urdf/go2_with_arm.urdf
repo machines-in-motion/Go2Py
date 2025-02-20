@@ -985,7 +985,7 @@ Stephen Brawner (brawner@gmail.com)
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="d1_assets/stl/Link6.STL" />
+          filename="d1_assets/stl/Link6-new.stl" />
       </geometry>
       <material
         name="">
@@ -1013,136 +1013,20 @@ Stephen Brawner (brawner@gmail.com)
       effort="0"
       velocity="0" />
   </joint>
-  <link
-    name="Link7_1">
-    <inertial>
-      <origin
-        xyz="0.018927 0.006 0.012082"
-        rpy="0 0 0" />
-      <mass
-        value="0.015046" />
-      <inertia
-        ixx="1.2692E-06"
-        ixy="7.7441E-20"
-        ixz="-1.133E-07"
-        iyy="2.0229E-06"
-        iyz="1.2044E-20"
-        izz="2.6177E-06" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="d1_assets/stl/Link7_1.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="1 1 1 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="d1_assets/stl/Link7_1.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="Joint7_1"
-    type="prismatic">
-    <origin
-      xyz="-0.0056012 -0.029636 0.0706"
-      rpy="-1.5714 -1.5708 0" />
-    <parent
-      link="Link6" />
-    <child
-      link="Link7_1" />
-    <axis
-      xyz="0 0 -1" />
-    <limit
-      lower="0"
-      upper="0.03"
-      effort="0"
-      velocity="0" />
-  </joint>
-  <link
-    name="Link7_2">
-    <inertial>
-      <origin
-        xyz="0.018927 -0.006 0.012082"
-        rpy="0 0 0" />
-      <mass
-        value="0.015046" />
-      <inertia
-        ixx="1.2692E-06"
-        ixy="-7.8273E-20"
-        ixz="-1.133E-07"
-        iyy="2.0229E-06"
-        iyz="-1.2122E-20"
-        izz="2.6177E-06" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="d1_assets/stl/Link7_2.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="1 1 1 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="d1_assets/stl/Link7_2.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="Joint7_2"
-    type="prismatic">
-    <origin
-      xyz="-0.0056388 0.02964 0.0706"
-      rpy="1.5702 -1.5708 0" />
-    <parent
-      link="Link6" />
-    <child
-      link="Link7_2" />
-    <axis
-      xyz="0 0 1" />
-    <limit
-      lower="-0.03"
-      upper="0"
-      effort="0"
-      velocity="0" />
-  </joint>
 
   <link
-    name="Link6_tip">
+    name="ef_tip">
   </link>
   <joint
     name="tip_joint"
     type="fixed">
     <origin
-      xyz="0.0 0.0 0.0"
+      xyz="0.0 0.0 0.053"
       rpy="0.0 0.0 0.0" />
     <parent
       link="Link6" />
     <child
-      link="Link6_tip" />
+      link="ef_tip" />
   </joint>
 </robot>
 
