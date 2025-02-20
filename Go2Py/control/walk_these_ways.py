@@ -125,7 +125,7 @@ class CommandInterface:
         self.body_height_cmd = 0.0
         self.step_frequency_cmd = 3.0
         self.gait = torch.tensor(self.gaits["trotting"])
-        self.footswing_height_cmd = 0.08
+        self.footswing_height_cmd = 0.06
         self.pitch_cmd = 0.0
         self.roll_cmd = 0.0
         self.stance_width_cmd = 0.25
@@ -498,6 +498,7 @@ class WalkTheseWaysAgent:
             "privileged_obs": None,
             "foot_contact_rate": foot_contact_rate[np.newaxis, :],
             "foot_contact_forces_mag": self.foot_contact_forces_mag.copy(),
+            "actions": actions.cpu().numpy(),
         }
 
         self.timestep += 1

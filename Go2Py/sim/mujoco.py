@@ -6,6 +6,7 @@ from Go2Py import ASSETS_PATH
 import os
 from scipy.spatial.transform import Rotation
 import cv2
+from threading import Thread
 
 pnt = np.array([-0.2, 0, 0.05])
 lidar_angles = np.linspace(0.0, 2 * np.pi, 1024).reshape(-1, 1)
@@ -244,6 +245,7 @@ class Go2Sim:
                  camera_resolution = (640, 480),
                  camera_depth_range = (0.35, 3.0), 
                  friction_model = None,
+                 async_mode = False,
                  ):
 
         if xml_path is None:
@@ -338,7 +340,18 @@ class Go2Sim:
         self.camera_resolution = camera_resolution
         self.camera_depth_range = camera_depth_range
         self.camera = Camera(self.camera_resolution, self.model, self.data, self.camera_name, min_depth=self.camera_depth_range[0] ,max_depth=self.camera_depth_range[1])
-
+        self.async_mode = async_mode
+        self.running = True
+        if async_mode:
+            self.sim_thread = Thread(target=self.sim_func_loop)
+            self.sim_thread.start()
+    
+    def sim_func_loop(self):
+        while self.running:
+            tic = time.time()
+            self.step()
+            while time.time()-tic < self.dt:
+                time.sleep(0.0001)
     def updateHeightMap(self, height_map, hfield_size = (300,300), raw_deoth_to_height_ratio = 255.):
         try:
             map = cv2.resize(height_map, hfield_size)/raw_deoth_to_height_ratio
@@ -474,6 +487,12 @@ class Go2Sim:
         g_in_body = R.T @ np.array([0.0, 0.0, -1.0]).reshape(3, 1)
         return g_in_body
 
+    def getForwardVecInBody(self):
+        _, q = self.getPose()
+        R = Rotation.from_quat([q[1], q[2], q[3], q[0]]).as_matrix()
+        forward_vec_in_body = R.T @ np.array([1.0, 0.0, 0.0]).reshape(3, 1)
+        return forward_vec_in_body
+
     def getLaserScan(self, max_range=30):
         t, q = self.getPose()
         world_R_body = Rotation.from_quat([q[1], q[2], q[3], q[0]]).as_matrix()
@@ -523,3 +542,6 @@ class Go2Sim:
     def close(self):
         if self.render:
             self.viewer.close()
+        if self.async_mode:
+            self.running = False
+            self.sim_thread.join()

@@ -203,3 +203,9 @@ class GO2Real():
         R = Rotation.from_quat(q).as_matrix()
         g_in_body = R.T @ np.array([0.0, 0.0, -1.0]).reshape(3, 1)
         return g_in_body
+    
+    def getForwardVecInBody(self):
+        q = self.getIMU()['quat']
+        R = Rotation.from_quat(q).as_matrix()
+        g_in_body = R.T @ np.array([1.0, 0.0, 0.0]).reshape(3, 1)
+        return g_in_body

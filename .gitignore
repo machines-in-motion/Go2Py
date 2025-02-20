@@ -176,3 +176,15 @@ _isaac_sim
 deploy/sgiaun-umut
 examples/datasets
 Go2Py/assets/checkpoints/SoloParkour/devel
+Go2Py/assets/checkpoints/SoloParkour
+Go2Py/assets/checkpoints/neuro_diff_sim
+examples/data
+examples/models
+examples/utils
+examples/actuators_data_collection.ipynb
+Go2Py/control/neuro_diff_sim.py
+Go2Py/control/bipedal.py
+examples/06-CaT-Flat-Ground-RL-controller.ipynb
+examples/06-CaT-RL-controller.ipynb
+examples/09-NeuroDiffSim-RL-controller.ipynb
+examples/10-BipedalPolicy-RL-controller.ipynb
