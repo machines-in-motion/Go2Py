@@ -1,0 +1,13 @@
+[Unit]
+Description=ROS2 device driver container
+Requires=multi-user.target
+After=multi-user.target
+
+[Service]
+Restart=always
+ExecStartPre=/usr/bin/docker rm -f go2py_mid360 || true
+ExecStart=/bin/bash -c '/usr/bin/docker run --rm --name go2py_mid360 --privileged --network host -v /dev/*:/dev/* -v /etc/localtime:/etc/localtime:ro --runtime nvidia go2py_mid360:latest' 
+ExecStop=/usr/bin/docker stop -t 2 go2py_mid360
+
+[Install]
+WantedBy=default.target

@@ -184,6 +184,21 @@
         <child link="hesai"/>
         <axis xyz="0 0 0"/>
     </joint>
+
+
+    <link name="mid360">
+        <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <mass value="0"/>
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+        </inertial>
+    </link>
+    <joint name="mid360_joint" type="fixed">
+        <origin rpy="0. 0.22689284 0." xyz="0.1870 0 0.0803"/>
+        <parent link="base_link"/>
+        <child link="mid360"/>
+        <axis xyz="0 0 0"/>
+    </joint>
     
     <xacro:leg name="FR" mirror="-1" mirror_dae= "False" front_hind="1"  front_hind_dae="True"  />
     <xacro:leg name="FL" mirror="1"  mirror_dae="True"   front_hind="1"  front_hind_dae="True"  />

@@ -171,7 +171,7 @@ class Policy:
             if self.step_counter%50==0:
                 self.perturbation = torch.rand_like(latent)*0.9
             self.step_counter +=1
-            print(latent, self.perturbation)
+            # print(latent, self.perturbation)
             info["latent"] = latent
             action = self.body.forward(
                 torch.cat((obs["obs_history"].to("cpu"), latent), dim=-1)

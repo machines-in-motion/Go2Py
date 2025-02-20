@@ -362,15 +362,22 @@ class Go2Sim:
         except:
             raise Exception(f'Could not load heightmap. Make sure the heigh_map is a 2D numpy array')
 
-    def reset(self):
-        self.q_nominal = np.hstack(
-            [self.pos0.squeeze(), self.rot0.squeeze(), self.q0.squeeze()]
-        )
+    def reset(self, q0=None):
+        if q0 is None:
+            self.q_nominal = np.hstack(
+                [self.pos0.squeeze(), self.rot0.squeeze(), self.q0.squeeze()]
+            )
+        else:
+            assert q0.shape == (19,), 'Invalid q0 shape. The shape should be (19,)'
+            self.q_nominal = q0
         self.data.qpos = self.q_nominal
         self.data.qvel = np.zeros(18)
         self.ex_sum=0
         self.ey_sum=0
         self.e_omega_sum=0
+        mujoco.mj_step(self.model, self.data)
+        if self.render:
+            self.viewer.sync()
 
     def standUpReset(self):
         self.q0 = self.standing_q

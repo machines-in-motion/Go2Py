@@ -29,6 +29,138 @@ sudo apt-get install iptables-persistent
 sudo iptables-save > /etc/iptables/rules.v4
 sudo ip6tables-save > /etc/iptables/rules.v6
 ```
+### Configuring Apt Sources
+By default, the unitree comes with jetpack revision `r35.1` and Ubuntu 20.04. If you're outside China, you can change the apt source lists to the default values for faster software download. First create a backup of the old apt sources:
+
+```bash
+sudo mv /etc/apt/sources.list /etc/apt/sources.list.old
+```
+
+Then copy the following into the `/etc/apt/sources.list`:
+
+``` bash
+# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
+# newer versions of the distribution.
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic main restricted
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic main restricted
+
+## Major bug fix updates produced after the final release of the
+## distribution.
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main restricted
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-updates main restricted
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team. Also, please note that software in universe WILL NOT receive any
+## review or updates from the Ubuntu security team.
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic universe
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic universe
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-updates universe
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-updates universe
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team, and may not be under a free licence. Please satisfy yourself as to
+## your rights to use the software. Also, please note that software in
+## multiverse WILL NOT receive any review or updates from the Ubuntu
+## security team.
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic multiverse
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-updates multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-updates multiverse
+
+## N.B. software from this repository may not have been tested as
+## extensively as that contained in the main release, although it includes
+## newer versions of some applications which may provide useful features.
+## Also, please note that software in backports WILL NOT receive any review
+## or updates from the Ubuntu security team.
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-backports main restricted universe multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-backports main restricted universe multiverse
+
+## Uncomment the following two lines to add software from Canonical's
+## 'partner' repository.
+## This software is not part of Ubuntu, but is offered by Canonical and the
+## respective vendors as a service to Ubuntu users.
+# deb http://archive.canonical.com/ubuntu bionic partner
+# deb-src http://archive.canonical.com/ubuntu bionic partner
+
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-security main restricted
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-security main restricted
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-security universe
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-security universe
+deb http://ports.ubuntu.com/ubuntu-ports/ bionic-security multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports/ bionic-security multiverse
+```
+We can also enable the Nvidia mirrors as explained [here](https://docs.nvidia.com/jetson/archives/r35.1/DeveloperGuide/text/SD/SoftwarePackagesAndTheUpdateMechanism.html). Specifically, do `sudo vi /etc/apt/sources.list.d/nvidia-l4t-apt-source.list` and copy the following inside:
+```bash
+deb https://repo.download.nvidia.com/jetson/common r35.1 main
+deb https://repo.download.nvidia.com/jetson/t234 r35.1 main
+```
+Finally, update the and upgrade:
+```bash
+sudo apt update
+sudo apt upgrade
+```
+### Installing CUDA
+
+To use the onboard GPU we need to install the CUDA toolkit for Jetson [here](https://developer.nvidia.com/cuda-11-8-0-download-archive?target_os=Linux&target_arch=aarch64-jetson&Compilation=Native&Distribution=Ubuntu&target_version=20.04&target_type=deb_local). Specifically:
+
+```
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/arm64/cuda-ubuntu2004.pin
+sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda-tegra-repo-ubuntu2004-11-8-local_11.8.0-1_arm64.deb
+sudo dpkg -i cuda-tegra-repo-ubuntu2004-11-8-local_11.8.0-1_arm64.deb
+sudo cp /var/cuda-tegra-repo-ubuntu2004-11-8-local/cuda-*-keyring.gpg /usr/share/keyrings/
+sudo apt-get update
+sudo apt-get -y install cuda-11-8
+```
+Additionally, we also need to install the following packages for successful CUDA kernel compilation in our projects:
+```
+sudo apt install -y libcudnn8-dev libcusolver-dev-11-8 libcublas-dev-11-8 libcublas-11-8 libcusparse-11-8 libcusparse-dev-11-8
+```
+In order to install Torch, we need to know what Jetpack revision we have. You can check it out through the following command:
+```
+dpkg-query --show nvidia-l4t-core
+```
+### Installing Conda
+
+Simply run the following commands to install Conda:
+
+```bash
+sudo chown $USER /opt
+wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-aarch64.sh -O ~/miniconda.sh
+/bin/bash ~/miniconda.sh -b -p /opt/conda 
+rm ~/miniconda.sh 
+sudo ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh 
+echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc 
+echo "conda activate base" >> ~/.bashrc
+```
+
+Now create a virtual environment for the deployment of the RL policies available in Go2Py:
+
+```bash
+conda create --name rl-deploy python==3.8.10
+conda activate rl-deploy
+```
+
+Finally, install the deep learning libraries needed for the deployments:
+
+#### DL Frameworks
+Download and install appropriate version as described [here](https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048):
+
+```bash
+cd ~
+wget https://developer.download.nvidia.cn/compute/redist/jp/v512/pytorch/torch-2.1.0a0+41361538.nv23.06-cp38-cp38-linux_aarch64.whl torch-2.1.0a0+41361538.nv23.06-cp38-cp38-linux_aarch64.whl
+python -m pip install torch-2.1.0a0+41361538.nv23.06-cp38-cp38-linux_aarch64.whl
+# Install warp-lang if required
+pip install https://github.com/NVIDIA/warp/releases/download/v1.5.1/warp_lang-1.5.1+cu11-py3-none-manylinux2014_aarch64.whl
+```
+If successful, the following check should return true:
+
+```python
+import torch
+print(torch.cuda.is_available())
+```
+
+
 ### Robot
 Now tell the computer on the robot to use the internet shared by the host computer. SSH into the robot's computer with IP address `192.168.123.18`, username `unitree`, and password `123`. Note that the host computer's IP range should have already been set to static mode with an IP in the `192.168.123.x` range where x is anything except IPs already used by the others (e.g. `.18`).
 
