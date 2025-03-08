@@ -369,8 +369,8 @@ class Go2Sim:
         else:
             assert q0.shape == (self.nq,), f'Invalid q0 shape. The shape should be ({self.nq},)'
             self.q_nominal = q0
-        self.data.qpos = self.q_nominal
-        self.data.qvel = np.zeros(self.nv)
+        self.data.qpos[:] = self.q_nominal
+        self.data.qvel[:] = np.zeros(self.nv)
         self.ex_sum=0
         self.ey_sum=0
         self.e_omega_sum=0
