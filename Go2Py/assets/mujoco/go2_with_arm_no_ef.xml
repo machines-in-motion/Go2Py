@@ -261,7 +261,7 @@
                     <inertial pos="-0.0068528 -3.9973e-06 0.039705" quat="0.494949 0.495288 -0.504676 0.504992" mass="0.077892" diaginertia="4.8843e-05 3.8232e-05 1.7707e-05"/>
                     <joint name="Joint6" pos="0 0 0" axis="0 0 -1" range="-2.35 2.35"/>
                     <geom type="mesh" rgba="1 1 1 1" mesh="Link6"/>
-                      <body name="EF_dummy" pos="0.0 0 0.0405">
+                      <body name="EF_dummy" pos="0.0 0 0.0406">
                         <!-- <inertial pos="0 0 0" mass="0.0001" diaginertia="0.0 0.0 0.0"/> -->
                         <inertial pos="0 0 0" mass="0.04" diaginertia="9.6e-06 9.6e-06 9.6e-06"/>
                         <geom size="0.015" rgba="0 1 0 1"/>
