@@ -45,6 +45,7 @@
     <hfield name="terrain"  nrow="300" ncol="300" size="5 5 1. 0.1"/>
     <material name="metal" rgba=".9 .95 .95 1"/>
     <material name="black" rgba="0 0 0 1"/>
+    <material name="glossy_red" rgba="1 0 0 0.3"/>
     <material name="white" rgba="1 1 1 1"/>
     <material name="gray" rgba="0.671705 0.692426 0.774270 1"/>
     <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
@@ -74,6 +75,7 @@
     <mesh name="Link4" file="d1_assets/stl/Link4.STL"/>
     <mesh name="Link5" file="d1_assets/stl/Link5.STL"/>
     <mesh name="Link6" file="d1_assets/stl/Link6-new.stl"/>
+    <mesh name="cone" file="go2_assets/cone.stl"/>
   </asset>
 
   <worldbody>
@@ -276,6 +278,20 @@
       </body>
 
     </body>
+
+    <body name="cone1" pos="0.1 0 0" childclass="go2">
+      <geom mesh="cone" material="glossy_red" class="visual"/>
+    </body>
+    <body name="cone2" pos="0 0 0" childclass="go2">
+      <geom mesh="cone" material="glossy_red" class="visual"/>
+    </body>
+    <body name="cone3" pos="0 0.1 0" childclass="go2">
+      <geom mesh="cone" material="glossy_red" class="visual"/>
+    </body>
+    <body name="cone4" pos="0.1 0.1 0" childclass="go2">
+      <geom mesh="cone" material="glossy_red" class="visual"/>
+    </body>
+
   </worldbody>
 
   <actuator>
