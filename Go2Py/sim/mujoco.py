@@ -342,12 +342,23 @@ class Go2Sim:
         self.camera = Camera(self.camera_resolution, self.model, self.data, self.camera_name, min_depth=self.camera_depth_range[0] ,max_depth=self.camera_depth_range[1])
         self.async_mode = async_mode
         self.running = True
+
         if async_mode:
+            self.async_wait = True
             self.sim_thread = Thread(target=self.sim_func_loop)
             self.sim_thread.start()
-    
+
+
+    def async_start(self):
+        self.async_wait = False
+
     def sim_func_loop(self):
         while self.running:
+
+            if self.async_wait:
+                time.sleep(self.dt)
+                continue
+
             tic = time.time()
             self.step()
             while time.time()-tic < self.dt:
