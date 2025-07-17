@@ -297,11 +297,6 @@ class Go2Sim:
                                     0.0, 0.76754963, -1.56634164,
                                     0.0, 0.76681757, -1.53601146,
                                     0.0, 0.75422204, -1.53229916])
-        
-        self.home_q = np.array([0, 0.9, -1.8,
-                                0, 0.9, -1.8,
-                                0, 0.9, -1.8,
-                                0, 0.9, -1.8,])
 
         self.q0 = self.sitting_q
         self.pos0 = np.array([0., 0., 0.1])
@@ -398,15 +393,6 @@ class Go2Sim:
     def standUpReset(self):
         self.q0 = self.standing_q
         self.pos0 = np.array([0., 0., 0.33])
-        self.rot0 = np.array([1., 0., 0., 0.])
-        self.reset()
-        mujoco.mj_step(self.model, self.data)
-        if self.render:
-            self.viewer.sync()
-
-    def homeReset(self):
-        self.q0 = self.home_q
-        self.pos0 = np.array([0., 0., 0.27])
         self.rot0 = np.array([1., 0., 0., 0.])
         self.reset()
         mujoco.mj_step(self.model, self.data)
