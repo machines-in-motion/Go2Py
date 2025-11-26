@@ -10,7 +10,7 @@ The following steps configure the host computer to share its internet with the r
 #### Enable IP forwarding:
 
 ```bash
-sudo systemctl -w net.ipv4.ip_forward=1
+sudo sysctl -w net.ipv4.ip_forward=1
 ```
 #### Configure the iptables:
 
