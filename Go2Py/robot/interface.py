@@ -19,7 +19,7 @@ from threading import Thread
 from scipy.spatial.transform import Rotation
 from Go2Py.joy import xKeySwitch, xRockerBtn
 from Go2Py.utils import set_cyclonedds_config
-
+from copy import deepcopy
 
 class GO2Real():
     def __init__(
@@ -80,6 +80,7 @@ class GO2Real():
         self.state = Go2pyState_
         self.state_thread = Thread(target=self.state_update)
         self.running = True
+        self.latest_command = None
         self.state_thread.start()
 
     def state_update(self):
@@ -171,6 +172,13 @@ class GO2Real():
 
     def setCommandsLow(self, q_des, dq_des, kp, kd, tau_ff):
         assert q_des.size == dq_des.size == kp.size == kd.size == tau_ff.size == 12, "q, dq, kp, kd, tau_ff should have size 12"
+        self.latest_command = dict(
+            kp=deepcopy(kp),
+            kd=deepcopy(kd),
+            q_des=deepcopy(q_des),
+            dq_des=deepcopy(dq_des),
+            tau_ff=deepcopy(tau_ff),
+        )
         lowcmd = Go2pyLowCmd_(
             q_des,
             dq_des,

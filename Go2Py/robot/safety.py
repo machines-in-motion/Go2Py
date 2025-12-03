@@ -19,9 +19,9 @@ class SafetyHypervisor():
             if np.any(np.array(temperature)>self.max_temperature):
                 print(f'One of the actuators reached max temperature of {self.max_temperature}')
                 return True
-            if self.compute_body_stability_idx(self.robot.getGravityInBody()) < self.body_stability_idx:
-                print('Body is tilted too much! deactivating the controller')
-                return True
+            #if self.compute_body_stability_idx(self.robot.getGravityInBody()) < self.body_stability_idx:
+            #    print('Body is tilted too much! deactivating the controller')
+            #    return True
         return False
 
     def controlTimeout(self):

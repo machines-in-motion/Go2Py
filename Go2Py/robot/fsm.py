@@ -40,8 +40,9 @@ class FSM:
         self.fsm_thread.start()
         # if the robot is a simulation, create a thread for stepping it
         if self.robot.simulated:
-            self.sim_thread = threading.Thread(target=self.simUpdate)
-            self.sim_thread.start()
+            if not self.robot.async_mode:
+                self.sim_thread = threading.Thread(target=self.simUpdate)
+                self.sim_thread.start()
 
     def setMode(self, mode):
         assert mode in self.modes.keys(), 'the requested control update mode is not implemented'
@@ -93,9 +94,11 @@ class FSM:
 
     def update(self):
         while self.running:
+            tic = time.time()
             getattr(self, self.state)()
-            time.sleep(self.dT)
             self.updateCommands()
+            while time.time()-tic < self.fsm_dT:
+                time.sleep(0.0001)
 
     def close(self):
         self.running = False
